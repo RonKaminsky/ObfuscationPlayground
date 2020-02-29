@@ -1,6 +1,0 @@
-#! /bin/bash
-
-# with thanks to Surma
-# https://surma.dev/things/c-to-webassembly/
-
-clang --target=wasm32 -nostdlib -Wl,--no-entry -Wl,--export-all -o "$1".wasm "$1".c
