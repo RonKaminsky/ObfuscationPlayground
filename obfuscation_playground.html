@@ -5,16 +5,15 @@
 <title>
   Obfuscation Playground
 </title>
-<meta name="description" content="Helps you create passwords and obfuscate data." />
+<meta name="description" content="An easily auditable web application for generating cryptographic hashes and obfuscating small amounts of data." />
 </head>
 <body>
 
-<div align="center" id="noscript">
-  <b>
-    JavaScript is disabled? To run this
-    workbench, JavaScript needs to be enabled.
+<div align="center" id="noscript" style="display: flex; margin: 1em; height: 3em; background-color: red">
+  <b style="margin-top: 1em; margin-left: 4em; color: white;">
+    JavaScript is disabled? To play in this
+    playground, JavaScript needs to be enabled.
   </b>
-  <br><br>
 </div>
 
 <script type="text/javascript">
@@ -24,7 +23,7 @@
 <script src="wasm_plugins.js"></script>
 
 <p style="margin: 2em;">
-<form name="tpw_form" action="">
+<form name="obpg_form" action="">
 <input name="inputformat" value="base64" 
        type="radio">Base-64
 <input name="inputformat" value="hex" 
@@ -63,6 +62,7 @@
   <option value="obfus-0">Obfuscation 0</option>
   <option value="obfus-1">Obfuscation 1</option>
   <option value="obfus-2">Obfuscation 2</option>
+  <option value="obfus-3">Obfuscation 3</option>
   </optgroup>
 </select>
 
@@ -85,12 +85,9 @@
 </textarea>
 </p>
 
-<p>
-</p>
-
 </form>
 
-<script src="tpw.js"></script>
+<script src="obfuscation_playground.js"></script>
 
 </body>
 </html>

@@ -5,6 +5,10 @@
 var internalEncoding = 'utf-8'; // 'utf-16' is also supported (but not well-checked)
 var lineBreakLength = 70;
 
+function announceError(message) {
+    throw new Error(message);
+}
+
 function base64ToBuffer (theString) {
   var cleanInput = String(theString).replace(/[\t\n\f\r ]+/g, '');
   var binaryString = window.atob(cleanInput);
@@ -20,7 +24,7 @@ function base64ToBuffer (theString) {
 function hexToBuffer (theString) {
   var cleanInput = String(theString).replace(/[\t\n\f\r ]+/g, '');
   if ((cleanInput.length % 2) === 1) {
-    throw new Error('Hex input must have an even number of digits');
+      announceError('Hex input must have an even number of digits');
   }
   var hexes = cleanInput.match(/../g) || [];
   var bufferLength = cleanInput.length / 2;
@@ -38,7 +42,7 @@ function toBuffer (theString) {
   } else if (internalEncoding === 'utf-16') {
     return toUtf16Buffer(theString);
   } else {
-    throw new Error('Unsupported encoding');
+    announceError('Unsupported encoding');
   }
 }
 
@@ -85,7 +89,7 @@ function fromBuffer (buffer) {
   } else if (internalEncoding === 'utf-16') {
     return fromUtf16Buffer(buffer);
   } else {
-    throw new Error('Unsupported encoding');
+    announceError('Unsupported encoding');
   }
 }
 
@@ -98,7 +102,7 @@ function fromUtf8Buffer (buffer) {
 
 function fromUtf16Buffer (buffer) {
   if (buffer.length % 2 === 1) {
-    throw new Error('UTF-16 encoded string must have an even number of bytes');
+    announceError('UTF-16 encoded string must have an even number of bytes');
   }
   var bufferLength = buffer.length / 2;
   var utf16Buffer = new Uint16Array(bufferLength);
@@ -145,23 +149,23 @@ function promiseFailureCallback (error) {
 
 function redisplayOutput (outputBuffer) {
   if (outputBuffer === null) {
-    document.tpw_form.the_output.value = '';
-  } else if (document.tpw_form.outputformat[0].checked) {
-    document.tpw_form.the_output.value = base64FromBuffer(outputBuffer);
-  } else if (document.tpw_form.outputformat[1].checked) {
-    document.tpw_form.the_output.value = hexFromBuffer(outputBuffer);
+    document.obpg_form.the_output.value = '';
+  } else if (document.obpg_form.outputformat[0].checked) {
+    document.obpg_form.the_output.value = base64FromBuffer(outputBuffer);
+  } else if (document.obpg_form.outputformat[1].checked) {
+    document.obpg_form.the_output.value = hexFromBuffer(outputBuffer);
   } else {
-    document.tpw_form.the_output.value = fromBuffer(outputBuffer);
+    document.obpg_form.the_output.value = fromBuffer(outputBuffer);
   }
 }
 
 function inputAsBuffer () {
-  if (document.tpw_form.inputformat[0].checked) {
-    return base64ToBuffer(document.tpw_form.the_data.value);
-  } else if (document.tpw_form.inputformat[1].checked) {
-    return hexToBuffer(document.tpw_form.the_data.value);
+  if (document.obpg_form.inputformat[0].checked) {
+    return base64ToBuffer(document.obpg_form.the_data.value);
+  } else if (document.obpg_form.inputformat[1].checked) {
+    return hexToBuffer(document.obpg_form.the_data.value);
   } else {
-    return toBuffer(document.tpw_form.the_data.value);
+    return toBuffer(document.obpg_form.the_data.value);
   }
 }
 
@@ -180,8 +184,13 @@ function selectedMemory () {
 }
 
 function runDirection (runForward) {
-  document.tpw_form.the_output.value = '';
-  var data = new Uint8Array(inputAsBuffer());
+  document.obpg_form.the_output.value = '';
+  try {
+    var data = new Uint8Array(inputAsBuffer());
+  } catch (e) {
+    window.alert(e);
+    console.error(e);  
+  }
 
   selectedPlugin().then(result => {
     var outputLength = (runForward
@@ -223,19 +232,19 @@ function backward () { // eslint-disable-line no-unused-vars
 }
 
 function doSwitch () { // eslint-disable-line no-unused-vars
-  var temp = document.tpw_form.the_data.value;
-  document.tpw_form.the_data.value = document.tpw_form.the_output.value;
-  document.tpw_form.the_output.value = temp;
+  var temp = document.obpg_form.the_data.value;
+  document.obpg_form.the_data.value = document.obpg_form.the_output.value;
+  document.obpg_form.the_output.value = temp;
 }
 
 function doClear () { // eslint-disable-line no-unused-vars
-  document.tpw_form.the_data.value = '';
+  document.obpg_form.the_data.value = '';
   var outputSlice = null;
   redisplayOutput(outputSlice);
 }
 
 function doBreakLines () { // eslint-disable-line no-unused-vars
-  var output = document.tpw_form.the_output;
+  var output = document.obpg_form.the_output;
   output.value = brokenIntoLines(output.value, lineBreakLength);
   output.select();
 }
