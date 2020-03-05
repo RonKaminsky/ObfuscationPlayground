@@ -264,3 +264,6 @@ function setParameter () { // eslint-disable-line no-unused-vars
     }
   }
 }
+
+// get rid of textarea default garbage due to nicely formatting HTML
+doClear();
