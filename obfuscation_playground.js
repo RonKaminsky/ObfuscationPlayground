@@ -134,7 +134,7 @@ for (var key in wasmPlugin) {
     var memoryNamespace = wasmPlugin[key][0];
     var wasmBase64 = wasmPlugin[key][1];
     if (!{}.hasOwnProperty.call(pluginMemory, memoryNamespace)) {
-      pluginMemory[memoryNamespace] = new WebAssembly.Memory({ initial: 20 });
+      pluginMemory[memoryNamespace] = new WebAssembly.Memory({ initial: 150 });
     }
     wasmInstances[key] = WebAssembly.instantiate(base64ToBuffer(wasmBase64),
       { env: { memory: pluginMemory[memoryNamespace] } });
