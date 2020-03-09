@@ -5,8 +5,8 @@
 var internalEncoding = 'utf-8'; // 'utf-16' is also supported (but not well-checked)
 var lineBreakLength = 70;
 
-function announceError(message) {
-    throw new Error(message);
+function announceError (message) {
+  throw new Error(message);
 }
 
 function base64ToBuffer (theString) {
@@ -24,7 +24,7 @@ function base64ToBuffer (theString) {
 function hexToBuffer (theString) {
   var cleanInput = String(theString).replace(/[\t\n\f\r ]+/g, '');
   if ((cleanInput.length % 2) === 1) {
-      announceError('Hex input must have an even number of digits');
+    announceError('Hex input must have an even number of digits');
   }
   var hexes = cleanInput.match(/../g) || [];
   var bufferLength = cleanInput.length / 2;
@@ -121,8 +121,6 @@ function brokenIntoLines (theString, length) {
 
 // create Array of plugin instances from base 64 encodings
 
-var pluginMemory = {};
-
 // following might use Object.entries(), Object.fromEntries() and map() when support is better?
 // (or maybe I should learn how to use JS objects properly?)
 
@@ -131,14 +129,10 @@ var wasmMemory = {};
 
 for (var key in wasmPlugin) {
   if ({}.hasOwnProperty.call(wasmPlugin, key)) {
-    var memoryNamespace = wasmPlugin[key][0];
-    var wasmBase64 = wasmPlugin[key][1];
-    if (!{}.hasOwnProperty.call(pluginMemory, memoryNamespace)) {
-      pluginMemory[memoryNamespace] = new WebAssembly.Memory({ initial: 150 });
-    }
+    var wasmBase64 = wasmPlugin[key];
+    wasmMemory[key] = new WebAssembly.Memory({ initial: 75 });
     wasmInstances[key] = WebAssembly.instantiate(base64ToBuffer(wasmBase64),
-      { env: { memory: pluginMemory[memoryNamespace] } });
-    wasmMemory[key] = pluginMemory[memoryNamespace];
+      { env: { memory: wasmMemory[key] } });
   }
 }
 
@@ -189,7 +183,7 @@ function runDirection (runForward) {
     var data = new Uint8Array(inputAsBuffer());
   } catch (e) {
     window.alert(e);
-    console.error(e);  
+    console.error(e);
   }
 
   selectedPlugin().then(result => {

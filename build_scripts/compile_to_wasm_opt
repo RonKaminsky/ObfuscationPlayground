@@ -5,4 +5,4 @@
 
 # -Wl,-z,stack-size=$[8 * 1024 * 1024] \ # Set maximum stack size to 8MiB
 
-clang --target=wasm32 -nostdlib -O3 -flto -Wl,--import-memory -Wl,--no-entry -Wl,--export-all -Wl,--lto-O3 -Wl,-z,stack-size=$[8 * 1024 * 1024] -o "$1".wasm "$1".c
+clang --target=wasm32 -nostdlib -O3 -flto -Wl,--import-memory -Wl,--no-entry -Wl,--export-all -Wl,--lto-O3 -Wl,-z,stack-size=$[4 * 1024 * 1024] -o "$1".wasm "$1".c
