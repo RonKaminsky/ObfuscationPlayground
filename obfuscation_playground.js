@@ -141,18 +141,6 @@ function promiseFailureCallback (error) {
   window.alert('Error in promise: ' + error);
 }
 
-function redisplayOutput (outputBuffer) {
-  if (outputBuffer === null) {
-    document.obpg_form.the_output.value = '';
-  } else if (document.obpg_form.outputformat[0].checked) {
-    document.obpg_form.the_output.value = base64FromBuffer(outputBuffer);
-  } else if (document.obpg_form.outputformat[1].checked) {
-    document.obpg_form.the_output.value = hexFromBuffer(outputBuffer);
-  } else {
-    document.obpg_form.the_output.value = fromBuffer(outputBuffer);
-  }
-}
-
 function inputAsBuffer () {
   if (document.obpg_form.inputformat[0].checked) {
     return base64ToBuffer(document.obpg_form.the_data.value);
@@ -164,6 +152,7 @@ function inputAsBuffer () {
 }
 
 const bytesPerWasmPage = 64 * 1024;
+var outputSlice = null;
 
 function selectedPlugin () {
   var selector = document.getElementById('action');
@@ -206,8 +195,8 @@ function runDirection (runForward) {
       var realOutputLengthInBytes = (runForward
         ? result.instance.exports.forward(base, data.length, base + data.length)
         : result.instance.exports.backward(base, data.length, base + data.length));
-      var outputSlice = memoryView.slice(base + data.length, base + data.length + realOutputLengthInBytes);
-      redisplayOutput(outputSlice);
+      outputSlice = memoryView.slice(base + data.length, base + data.length + realOutputLengthInBytes);
+      redisplayOutput();
     } catch (e) {
       window.alert(e);
       console.error(e);
@@ -233,8 +222,8 @@ function doSwitch () { // eslint-disable-line no-unused-vars
 
 function doClear () { // eslint-disable-line no-unused-vars
   document.obpg_form.the_data.value = '';
-  var outputSlice = null;
-  redisplayOutput(outputSlice);
+  outputSlice = null;
+  redisplayOutput();
 }
 
 function doBreakLines () { // eslint-disable-line no-unused-vars
@@ -256,6 +245,22 @@ function setParameter () { // eslint-disable-line no-unused-vars
       window.alert(e);
       console.error(e);
     }
+  }
+}
+
+function redisplayOutput () {
+  var output = document.obpg_form.the_output;
+  if (outputSlice === null) {
+    output.value = '';
+  } else if (document.obpg_form.outputformat[0].checked) {
+    output.value = base64FromBuffer(outputSlice);
+    output.select();
+  } else if (document.obpg_form.outputformat[1].checked) {
+    output.value = hexFromBuffer(outputSlice);
+    output.select();
+  } else {
+    output.value = fromBuffer(outputSlice);
+    output.select();
   }
 }
 
