@@ -1,6 +1,6 @@
 # ObfuscationPlayground
 
-[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
+[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)  ![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)
 
 An easily auditable web application for generating cryptographic hashes and obfuscating small amounts of data.
 
@@ -10,7 +10,7 @@ Under construction (but mainly works). Version -1/π. The supplied obfuscation p
 
 I created a private version of something like this many years ago, but it was all in JS and relied on an included, minified block of code from a JS crypto library. A monstrosity which was totally (at least for me) unauditable. (But with a cute macro language similar to the FALSE language!)
 
-But now, because of the very limited interface between WebAssembly and JS, it is now possible to make the equivalent with less than 300 un-minified lines of JS, and almost not have to worry about auditing the WebAssembly plugins because they have no way (barring bugs in implementation) to exfiltrate data (unless you implement obfuscations with ciphertext expansion, I suppose).
+But now, because of the very limited interface between WebAssembly and JS, it is now possible to make the equivalent with less than 300 un-minified lines of JS, and almost not have to worry about auditing the WebAssembly plugins because they have no way (barring bugs in browser implementation) to exfiltrate data (unless you implement obfuscations with ciphertext expansion, I suppose).
 
 ## Building
 
