@@ -131,8 +131,13 @@ for (var key in wasmPlugin) {
   if ({}.hasOwnProperty.call(wasmPlugin, key)) {
     var wasmBase64 = wasmPlugin[key];
     wasmMemory[key] = new WebAssembly.Memory({ initial: 75 });
-    wasmInstances[key] = WebAssembly.instantiate(base64ToBuffer(wasmBase64),
-      { env: { memory: wasmMemory[key] } });
+    try {
+      wasmInstances[key] = WebAssembly.instantiate(base64ToBuffer(wasmBase64),
+        { env: { memory: wasmMemory[key] } });
+    } catch (e) {
+      window.alert(e);
+      throw e;
+    }
   }
 }
 
