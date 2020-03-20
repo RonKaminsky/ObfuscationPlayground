@@ -259,8 +259,14 @@ function redisplayOutput () {
     output.value = hexFromBuffer(outputSlice);
     output.select();
   } else {
-    output.value = fromBuffer(outputSlice);
-    output.select();
+    try {
+      output.value = fromBuffer(outputSlice);
+      output.select();
+    } catch (e) {
+      output.value = '';
+      window.alert(e);
+      console.error(e);
+    }
   }
 }
 
