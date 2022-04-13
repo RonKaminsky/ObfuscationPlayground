@@ -20,7 +20,7 @@ The plugins include code from various sources, which have lenient licenses. This
 
 ## Tips
 
-The "URIError: malformed URI sequence" error means that you are trying to display, as a string, binary data which is not really a binary-encoded string --- choose a more appropriate output format.
+Trying to display, as a string, binary data which is not really a binary-encoded string will cause the output textbox background color to change to a shade of red, to signal that you should choose a more appropriate output format.
 
 The only supplied plugin which takes parameters is "obfus-2" ("Obfuscation 2" in the dropdown menu). It takes one parameter at index 0, which is expanded using a non-cryptographic PRNG to 12 bytes which are used as a key for a Vigenère cipher.
 
